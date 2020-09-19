@@ -6,6 +6,6 @@ import org.bukkit.plugin.java.JavaPlugin
 class PainVentories : JavaPlugin() {
 
     override fun onEnable() {
-        PainVentoriesAPI.setPlugin(this)
+        PainVentoriesAPI.plugin = this
     }
 }

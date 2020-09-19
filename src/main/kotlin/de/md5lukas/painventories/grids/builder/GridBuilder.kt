@@ -4,24 +4,24 @@ import de.md5lukas.painventories.grids.Grid
 import de.md5lukas.painventories.slots.Slot
 
 class GridBuilder(
-    private val rowAmount: Int,
-    columnAmount: Int
+    override val rows: Int,
+    override val columns: Int
 ) : Grid {
 
-    private val rows: List<Row> = List(rowAmount) { Row(columnAmount) }
+    private val rowList: List<Row> = List(rows) { Row(columns) }
     private var rowCounter = 0
 
     fun row(row: Row.() -> Unit) {
-        if (rowCounter + 1 == rowAmount) {
+        if (rowCounter + 1 == rows) {
             throw IndexOutOfBoundsException(
                 "The next row index would be $rowCounter, but that is located outside the available rows"
             )
         }
-        rows[rowCounter++].apply(row)
+        rowList[rowCounter++].apply(row)
     }
 
     override fun forEach(action: ((row: Int, column: Int, slot: Slot) -> Unit)) {
-        rows.forEachIndexed { rowNumber, row ->
+        rowList.forEachIndexed { rowNumber, row ->
             row.columns.forEachIndexed { columnNumber, slot ->
                 action(rowNumber, columnNumber, slot)
             }
@@ -29,22 +29,22 @@ class GridBuilder(
     }
 
     override fun forEachSet(action: (row: Int, column: Int) -> Slot) {
-        rows.forEachIndexed { rowNumber, row ->
+        rowList.forEachIndexed { rowNumber, row ->
             row.columns.forEachIndexed { columnNumber, _ ->
-                rows[rowNumber].columns[columnNumber] = action(rowNumber, columnNumber)
+                rowList[rowNumber].columns[columnNumber] = action(rowNumber, columnNumber)
             }
         }
     }
 
-    override fun get(row: Int, column: Int): Slot {
-        return rows[row].columns[column]
+    override operator fun get(row: Int, column: Int): Slot {
+        return rowList[row].columns[column]
     }
 
-    override fun set(row: Int, column: Int, slot: Slot) {
-        rows[row].columns[column] = slot
+    override operator fun set(row: Int, column: Int, slot: Slot) {
+        rowList[row].columns[column] = slot
     }
 
     override fun asList(): List<List<Slot>> {
-        return rows.map { it.columns }
+        return rowList.map { it.columns }
     }
 }

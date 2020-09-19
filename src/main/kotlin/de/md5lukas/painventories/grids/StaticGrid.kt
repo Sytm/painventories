@@ -3,7 +3,10 @@ package de.md5lukas.painventories.grids
 import de.md5lukas.painventories.slots.Slot
 import de.md5lukas.painventories.slots.StaticSlot
 
-class StaticGrid(rows: Int, columns: Int) : Grid {
+class StaticGrid(
+    override val rows: Int,
+    override val columns: Int
+) : Grid {
 
     private val grid: List<MutableList<Slot>> = List(rows) {
         MutableList(columns) {
@@ -27,9 +30,9 @@ class StaticGrid(rows: Int, columns: Int) : Grid {
         }
     }
 
-    override fun get(row: Int, column: Int): Slot = grid[row][column]
+    override operator fun get(row: Int, column: Int): Slot = grid[row][column]
 
-    override fun set(row: Int, column: Int, slot: Slot) {
+    override operator fun set(row: Int, column: Int, slot: Slot) {
         grid[row][column] = slot
     }
 
