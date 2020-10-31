@@ -16,18 +16,11 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.md5lukas.painventories.panes
+package de.md5lukas.painventories.panes.layout
 
-import de.md5lukas.painventories.grids.Grid
-import de.md5lukas.painventories.grids.builder.GridBuilder
+import de.md5lukas.painventories.panes.Pane
 
-class BasicPane(rows: Int = 1, columns: Int = 1) : AbstractPane(rows, columns) {
+interface Layoutable : Pane {
 
-    private val gridBuilder = GridBuilder(rows, columns)
-    override val grid: Grid
-        get() = gridBuilder
-
-    fun content(slotsInit: GridBuilder.() -> Unit) {
-        gridBuilder.apply(slotsInit)
-    }
+    fun Pane.addToLayout(row: Int, column: Int)
 }

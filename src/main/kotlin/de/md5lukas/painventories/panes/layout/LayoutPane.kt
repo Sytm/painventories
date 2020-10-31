@@ -18,14 +18,15 @@
 
 package de.md5lukas.painventories.panes.layout
 
+import de.md5lukas.painventories.grids.BasicGrid
 import de.md5lukas.painventories.grids.Grid
-import de.md5lukas.painventories.grids.StaticGrid
 import de.md5lukas.painventories.panes.AbstractDefaultablePane
 import de.md5lukas.painventories.panes.Pane
 
-class LayoutPane(rows: Int, columns: Int) : AbstractDefaultablePane(rows, columns) {
+class LayoutPane(rows: Int, columns: Int, init: LayoutPane.() -> Unit) : AbstractDefaultablePane(rows, columns),
+    Layoutable {
 
-    private val staticGrid = StaticGrid(rows, columns)
+    private val staticGrid = BasicGrid(rows, columns)
     private val children: MutableList<LayoutItem> = mutableListOf()
 
     override var updated: Boolean
@@ -57,6 +58,11 @@ class LayoutPane(rows: Int, columns: Int) : AbstractDefaultablePane(rows, column
 
     fun addPane(row: Int, column: Int, pane: Pane) {
         children.add(LayoutItem(row, column, pane))
+        updated = true
+    }
+
+    override fun Pane.addToLayout(row: Int, column: Int) {
+        addPane(row, column, this)
     }
 
     private fun rebuildGrid() {
@@ -73,5 +79,9 @@ class LayoutPane(rows: Int, columns: Int) : AbstractDefaultablePane(rows, column
                 }
             }
         }
+    }
+
+    init {
+        apply(init)
     }
 }

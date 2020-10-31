@@ -23,15 +23,18 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.jetbrains.annotations.ApiStatus.Internal
 
-class EditableSlot : AbstractSlot() {
+class EditableSlot(init: EditableSlot.() -> Unit) : AbstractSlot() {
 
     var onContentUpdateListener: ((slot: EditableSlot, event: SlotContentUpdateEvent) -> Unit)? = null
 
     /**
      * The actual item present in the item slot
      */
-    @Suppress("MemberVisibilityCanBePrivate")
     var content: ItemStack? = null
+
+    init {
+        apply(init)
+    }
 
     override fun getRenderItem(player: Player): ItemStack? {
         return content

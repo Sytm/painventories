@@ -19,19 +19,17 @@
 package de.md5lukas.painventories
 
 import de.md5lukas.painventories.internal.Constants
-import de.md5lukas.painventories.panes.Pane
+import de.md5lukas.painventories.panes.layout.LayoutPane
+import de.md5lukas.painventories.panes.layout.Layoutable
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
 
-class PainVentory(options: PainVentoryOptions) {
+class PainVentory(options: PainVentoryOptions, val player: Player) :
+    Layoutable by LayoutPane(options.rows, Constants.INVENTORY_WIDTH, {}) {
 
-    val player: Player = options.player
-
-    val rootPane: Pane = options.rootPane
     val title = options.title
     val closeable = options.closeable
-    val rows = options.rows
     val size = rows * Constants.INVENTORY_WIDTH
     val onClose = options.onClose
 
@@ -52,14 +50,14 @@ class PainVentory(options: PainVentoryOptions) {
 
     internal fun rerenderInventory() {
         inventoryHandle?.let { inv ->
-            if (!rootPane.updated) {
+            if (!updated) {
                 return
             }
-            rootPane.grid.forEach { row, column, slot ->
+            grid.forEach { row, column, slot ->
                 val slotIndex = (row * Constants.INVENTORY_WIDTH) + column
                 inv.setItem(slotIndex, slot.getRenderItem(player))
             }
-            rootPane.updated = false
+            updated = false
         }
     }
 }

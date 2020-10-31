@@ -22,10 +22,9 @@ import de.md5lukas.painventories.PainVentoriesAPI
 import de.md5lukas.painventories.event.SlotClickEvent
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import org.jetbrains.annotations.ApiStatus.Internal
 import java.util.logging.Level
 
-class NormalSlot : AbstractSlot() {
+class NormalSlot(init: NormalSlot.() -> Unit) : AbstractSlot() {
 
     /**
      * Filter that determines if a player sees the normal item or the fallback item, defaults to the normal item
@@ -54,6 +53,10 @@ class NormalSlot : AbstractSlot() {
      */
     var fallbackItem: ItemStack? = null
 
+    init {
+        apply(init)
+    }
+
     override fun getRenderItem(player: Player): ItemStack? {
         return if (canSee(player)) {
             item
@@ -62,8 +65,7 @@ class NormalSlot : AbstractSlot() {
         }
     }
 
-    @Internal
-    fun runClick(event: SlotClickEvent) {
+    internal fun runClick(event: SlotClickEvent) {
         if (canSee(event.player)) {
             try {
                 clickListener?.invoke(this, event)

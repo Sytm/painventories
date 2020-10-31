@@ -18,10 +18,9 @@
 
 package de.md5lukas.painventories.panes
 
-import com.google.common.base.Preconditions
 import de.md5lukas.commons.collections.PaginationList
+import de.md5lukas.painventories.grids.BasicGrid
 import de.md5lukas.painventories.grids.Grid
-import de.md5lukas.painventories.grids.StaticGrid
 import de.md5lukas.painventories.slots.Slot
 
 class PaginationPane(rows: Int, columns: Int) : AbstractDefaultablePane(rows, columns) {
@@ -30,13 +29,13 @@ class PaginationPane(rows: Int, columns: Int) : AbstractDefaultablePane(rows, co
 
     var page: Int = 0
         set(value) {
-            Preconditions.checkArgument(
-                value == 0 || (value >= 0 && value < items.pages()),
-                "The new page is out of bounds"
-            )
-            field = value
+            field = when {
+                (value < 0) -> 0
+                (value >= items.pages()) -> items.pages() - 1
+                else -> value
+            }
         }
-    private var static = StaticGrid(rows, columns)
+    private var static = BasicGrid(rows, columns)
 
     override val grid: Grid
         get() {
@@ -46,15 +45,18 @@ class PaginationPane(rows: Int, columns: Int) : AbstractDefaultablePane(rows, co
             return static
         }
 
-    fun previousPage() {
-        if (page <= 0) return
+    fun previousPage(): Boolean {
+        if (page <= 0) return false
         updated = true
         page--
+        return false
     }
 
-    fun nextPage() {
-        if (page + 1 >= items.pages()) return
+    fun nextPage(): Boolean {
+        if (page + 1 >= items.pages()) return false
+        updated = true
         page++
+        return true
     }
 
     fun setItems(newItems: List<() -> Slot>) {

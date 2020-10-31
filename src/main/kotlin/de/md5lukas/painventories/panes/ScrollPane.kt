@@ -19,18 +19,19 @@
 package de.md5lukas.painventories.panes
 
 import de.md5lukas.commons.MathHelper
+import de.md5lukas.painventories.grids.BasicGrid
 import de.md5lukas.painventories.grids.Grid
-import de.md5lukas.painventories.grids.StaticGrid
 import kotlin.math.max
 import kotlin.math.min
 
 class ScrollPane(
     rows: Int,
     columns: Int,
-    wrappedPane: Pane = BasicPane()
+    wrappedPane: Pane,
+    init: ScrollPane.() -> Unit
 ) : AbstractDefaultablePane(rows, columns) {
 
-    private val staticGrid = StaticGrid(rows, columns)
+    private val staticGrid = BasicGrid(rows, columns)
 
     var wrappedPane: Pane = wrappedPane
         set(value) {
@@ -115,4 +116,8 @@ class ScrollPane(
             }
             return staticGrid
         }
+
+    init {
+        apply(init)
+    }
 }

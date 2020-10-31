@@ -16,53 +16,44 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.md5lukas.painventories.grids.builder
+package de.md5lukas.painventories.grids
 
-import de.md5lukas.painventories.grids.Grid
 import de.md5lukas.painventories.slots.Slot
+import de.md5lukas.painventories.slots.StaticSlot
 
-class GridBuilder(
+class BasicGrid(
     override val rows: Int,
-    override val columns: Int
+    override val columns: Int,
+    defaultValue: Slot = StaticSlot.AIR
 ) : Grid {
 
-    private val rowList: List<Row> = List(rows) { Row(columns) }
-    private var rowCounter = 0
-
-    fun row(row: Row.() -> Unit) {
-        if (rowCounter + 1 == rows) {
-            throw IndexOutOfBoundsException(
-                "The next row index would be $rowCounter, but that is located outside the available rows"
-            )
+    private val grid: List<MutableList<Slot>> = List(rows) {
+        MutableList(columns) {
+            defaultValue
         }
-        rowList[rowCounter++].apply(row)
     }
 
-    override fun forEach(action: ((row: Int, column: Int, slot: Slot) -> Unit)) {
-        rowList.forEachIndexed { rowNumber, row ->
-            row.columns.forEachIndexed { columnNumber, slot ->
+    override fun forEach(action: (row: Int, column: Int, slot: Slot) -> Unit) {
+        grid.forEachIndexed { rowNumber, row ->
+            row.forEachIndexed { columnNumber, slot ->
                 action(rowNumber, columnNumber, slot)
             }
         }
     }
 
     override fun forEachSet(action: (row: Int, column: Int) -> Slot) {
-        rowList.forEachIndexed { rowNumber, row ->
-            row.columns.forEachIndexed { columnNumber, _ ->
-                rowList[rowNumber].columns[columnNumber] = action(rowNumber, columnNumber)
+        grid.forEachIndexed { rowNumber, row ->
+            row.forEachIndexed { columnNumber, _ ->
+                grid[rowNumber][columnNumber] = action(rowNumber, columnNumber)
             }
         }
     }
 
-    override operator fun get(row: Int, column: Int): Slot {
-        return rowList[row].columns[column]
-    }
+    override operator fun get(row: Int, column: Int): Slot = grid[row][column]
 
     override operator fun set(row: Int, column: Int, slot: Slot) {
-        rowList[row].columns[column] = slot
+        grid[row][column] = slot
     }
 
-    override fun asList(): List<List<Slot>> {
-        return rowList.map { it.columns }
-    }
+    override fun asList(): List<List<Slot>> = grid
 }

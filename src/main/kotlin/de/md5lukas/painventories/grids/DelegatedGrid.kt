@@ -19,40 +19,38 @@
 package de.md5lukas.painventories.grids
 
 import de.md5lukas.painventories.slots.Slot
-import de.md5lukas.painventories.slots.StaticSlot
 
-class StaticGrid(
+class DelegatedGrid(
     override val rows: Int,
-    override val columns: Int
+    override val columns: Int,
+    private val getter: (row: Int, column: Int) -> Slot
 ) : Grid {
 
-    private val grid: List<MutableList<Slot>> = List(rows) {
-        MutableList(columns) {
-            StaticSlot.AIR
-        }
-    }
-
     override fun forEach(action: (row: Int, column: Int, slot: Slot) -> Unit) {
-        grid.forEachIndexed { rowNumber, row ->
-            row.forEachIndexed { columnNumber, slot ->
-                action(rowNumber, columnNumber, slot)
+        for (row in 0 until rows) {
+            for (column in 0 until columns) {
+                action(row, column, getter(row, column))
             }
         }
     }
 
     override fun forEachSet(action: (row: Int, column: Int) -> Slot) {
-        grid.forEachIndexed { rowNumber, row ->
-            row.forEachIndexed { columnNumber, _ ->
-                grid[rowNumber][columnNumber] = action(rowNumber, columnNumber)
+        throw UnsupportedOperationException("Delegated Grids do not support set")
+    }
+
+    override fun get(row: Int, column: Int): Slot {
+        return getter(row, column)
+    }
+
+    override fun set(row: Int, column: Int, slot: Slot) {
+        throw UnsupportedOperationException("Delegated Grids do not support set")
+    }
+
+    override fun asList(): List<List<Slot>> {
+        return List(rows) { row ->
+            List(columns) { column ->
+                getter(row, column)
             }
         }
     }
-
-    override operator fun get(row: Int, column: Int): Slot = grid[row][column]
-
-    override operator fun set(row: Int, column: Int, slot: Slot) {
-        grid[row][column] = slot
-    }
-
-    override fun asList(): List<List<Slot>> = grid
 }
