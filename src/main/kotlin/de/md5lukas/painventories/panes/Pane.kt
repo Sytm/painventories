@@ -21,10 +21,28 @@ package de.md5lukas.painventories.panes
 import de.md5lukas.painventories.Updatable
 import de.md5lukas.painventories.grids.Grid
 
+/**
+ * A basic definition of a pane
+ */
 interface Pane : Updatable {
 
+    /**
+     * The amount of rows of the pane
+     */
     val rows: Int
+
+    /**
+     * The amount of columns of the pane
+     */
     val columns: Int
+
+    /**
+     * A representation of the pane as a grid
+     */
     val grid: Grid
+
+    /**
+     * If the pane is invisible it will not be shown
+     */
     var visible: Boolean
 }

@@ -20,4 +20,8 @@ package de.md5lukas.painventories.event
 
 import org.bukkit.entity.Player
 
-open class PVEvent(val player : Player)
+/**
+ * Class defining a PainVentories event involving a player
+ * @property player The player that has caused the event
+ */
+open class PVEvent internal constructor(val player: Player)

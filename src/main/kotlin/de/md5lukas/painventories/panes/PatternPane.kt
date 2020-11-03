@@ -23,6 +23,11 @@ import de.md5lukas.painventories.grids.Grid
 import de.md5lukas.painventories.slots.Slot
 import de.md5lukas.painventories.slots.StaticSlot
 
+/**
+ * This pane takes a defined pattern in a 2D array. Each character at a position maps to a slot converter
+ *
+ * @param T The type that will be converted to an Slot
+ */
 class PatternPane<T>(rows: Int, columns: Int, init: PatternPane<T>.() -> Unit) :
     AbstractDefaultablePane(rows, columns) {
 
@@ -39,8 +44,21 @@ class PatternPane<T>(rows: Int, columns: Int, init: PatternPane<T>.() -> Unit) :
     private val patternColumns: Int
         get() = pattern[0].length
 
+    /**
+     * Set to `true` to keep continuing the pattern if it's end has been reached
+     */
     var wrapAround = false
+
+    /**
+     * The default value that should be shown
+     */
     var defaultValue: T? = null
+
+    /**
+     * A callback that converts the arbitrary type [T] to a Slot.
+     *
+     * If [T] is a [Slot] it will be automatically casted to that type by the default callback
+     */
     var slotConverter: (T) -> Slot = {
         if (it is Slot) {
             it
@@ -49,6 +67,12 @@ class PatternPane<T>(rows: Int, columns: Int, init: PatternPane<T>.() -> Unit) :
         }
     }
 
+    /**
+     * Parses the provided lines and then applies them to this pattern.
+     *
+     * - The amount of lines cannot be zero
+     * - Each line must not be empty and the same length as the first one
+     */
     fun lines(lines: List<String>) {
         if (lines.isEmpty()) {
             throw IllegalArgumentException("The lines for the pattern cannot be empty")
@@ -74,15 +98,24 @@ class PatternPane<T>(rows: Int, columns: Int, init: PatternPane<T>.() -> Unit) :
         pattern = lines.toTypedArray()
     }
 
+    /**
+     * Parses the provided lines and then applies them to this pattern.
+     *
+     * - The amount of lines cannot be zero
+     * - Each line must not be empty and the same length as the first one
+     */
     fun lines(vararg lines: String) {
         lines(lines.toList())
     }
 
+    /**
+     * Maps a character to a slot convertible
+     */
     infix fun Char.to(t: T) {
         mappings[this] = t
     }
 
-    operator fun get(row: Int, column: Int): Slot {
+    private operator fun get(row: Int, column: Int): Slot {
         var varRow = row
         var varColumn = column
 

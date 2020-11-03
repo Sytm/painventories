@@ -20,7 +20,13 @@ package de.md5lukas.painventories.panes.layout
 
 import de.md5lukas.painventories.panes.Pane
 
+/**
+ * Classes which implement this can manage multiple panes as a layout
+ */
 interface Layoutable : Pane {
 
+    /**
+     * Adds the specified Pane to this pane as a layout option
+     */
     fun Pane.addToLayout(row: Int, column: Int)
 }

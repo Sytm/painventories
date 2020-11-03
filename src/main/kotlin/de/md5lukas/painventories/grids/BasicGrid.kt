@@ -21,6 +21,11 @@ package de.md5lukas.painventories.grids
 import de.md5lukas.painventories.slots.Slot
 import de.md5lukas.painventories.slots.StaticSlot
 
+/**
+ * A basic grid implementation getting and setting of its contents based on a backing 2D list
+ *
+ * @param defaultValue The default value to fill the grid with at it's initialization
+ */
 class BasicGrid(
     override val rows: Int,
     override val columns: Int,
@@ -41,7 +46,10 @@ class BasicGrid(
         }
     }
 
-    override fun forEachSet(action: (row: Int, column: Int) -> Slot) {
+    /**
+     * Calls the callback with each row and column and the returned value is set in the grid
+     */
+    fun forEachSet(action: (row: Int, column: Int) -> Slot) {
         grid.forEachIndexed { rowNumber, row ->
             row.forEachIndexed { columnNumber, _ ->
                 grid[rowNumber][columnNumber] = action(rowNumber, columnNumber)
@@ -51,7 +59,14 @@ class BasicGrid(
 
     override operator fun get(row: Int, column: Int): Slot = grid[row][column]
 
-    override operator fun set(row: Int, column: Int, slot: Slot) {
+    /**
+     * Updates the content in the grid at the specified position
+     *
+     * @param row The row of the slot
+     * @param column The column of the slot
+     * @param slot The new content in the grid
+     */
+    operator fun set(row: Int, column: Int, slot: Slot) {
         grid[row][column] = slot
     }
 

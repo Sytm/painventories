@@ -23,6 +23,9 @@ import de.md5lukas.painventories.slots.StaticSlot
 abstract class AbstractDefaultablePane(rows: Int, columns: Int) :
     AbstractPane(rows, columns) {
 
+    /**
+     * The slot content that is shown when the slot is updated
+     */
     var defaultSlot: StaticSlot = StaticSlot.AIR
         set(value) {
             field = value

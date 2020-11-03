@@ -61,7 +61,7 @@ internal class InventoryManager(
 
     private fun runCloseHook(player: Player) {
         openInventories[player]?.let {
-            it.onClose?.invoke(player, it)
+            it.options.onClose?.invoke(player, it)
         }
     }
 
@@ -85,7 +85,7 @@ internal class InventoryManager(
             val row: Int = e.slot / 9
             val column: Int = e.slot % 9
 
-            val slot = inv.rootPane.grid[row, column]
+            val slot = inv.grid[row, column]
 
             if (slot is EditableSlot) {
                 val event = SlotContentUpdateEvent(p, e.currentItem ?: ItemStack(Material.AIR))
@@ -111,7 +111,7 @@ internal class InventoryManager(
 
         val topSize = p.openInventory.topInventory.size
 
-        val grid = inv.rootPane.grid
+        val grid = inv.grid
 
         for (slot in e.rawSlots) {
             if (slot >= topSize)
@@ -133,9 +133,9 @@ internal class InventoryManager(
             closeQueue.remove(p)
             return
         }
-        if (inv.closeable || closeQueue.contains(p)) {
+        if (inv.options.closeable || closeQueue.contains(p)) {
             closeQueue.remove(p)
-            inv.onClose?.invoke(p, inv)
+            inv.options.onClose?.invoke(p, inv)
         } else {
             inv.openInventory()
         }

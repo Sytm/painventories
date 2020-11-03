@@ -123,7 +123,7 @@
                             </relocations>
                             <filters>
                                 <filter>
-                                    <artifact>*:*</artifact>
+                                    <artifact>de.md5lukas:md5-commons</artifact>
                                     <excludes>
                                         <exclude>META-INF/**</exclude>
                                     </excludes>

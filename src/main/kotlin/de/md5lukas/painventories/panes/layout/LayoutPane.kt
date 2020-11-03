@@ -23,6 +23,11 @@ import de.md5lukas.painventories.grids.Grid
 import de.md5lukas.painventories.panes.AbstractDefaultablePane
 import de.md5lukas.painventories.panes.Pane
 
+/**
+ * A layout pane is a pane that manages multiple children panes at different positions.
+ *
+ * Panes added later to the layout pane take are shown over the previous panes
+ */
 class LayoutPane(rows: Int, columns: Int, init: LayoutPane.() -> Unit) : AbstractDefaultablePane(rows, columns),
     Layoutable {
 
@@ -56,7 +61,7 @@ class LayoutPane(rows: Int, columns: Int, init: LayoutPane.() -> Unit) : Abstrac
             return staticGrid
         }
 
-    fun addPane(row: Int, column: Int, pane: Pane) {
+    private fun addPane(row: Int, column: Int, pane: Pane) {
         children.add(LayoutItem(row, column, pane))
         updated = true
     }

@@ -20,6 +20,11 @@ package de.md5lukas.painventories.panes.layout
 
 import de.md5lukas.painventories.panes.Pane
 
+/**
+ * @property row The row of the top-left most corner of the pane
+ * @property column The column of the top-left most corner of the pane
+ * @property pane The pane itself
+ */
 data class LayoutItem(
     val row: Int,
     val column: Int,

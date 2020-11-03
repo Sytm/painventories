@@ -18,11 +18,20 @@
 
 package de.md5lukas.painventories.event
 
+import de.md5lukas.painventories.slots.EditableSlot
 import org.bukkit.entity.Player
 import org.bukkit.event.Cancellable
 import org.bukkit.inventory.ItemStack
 
-class SlotContentUpdateEvent(player: Player, val newItem: ItemStack) : PVEvent(player), Cancellable {
+/**
+ * Event that gets fired when a player edits an [EditableSlot]
+ *
+ * @property newItem The item that is now in the slot
+ */
+class SlotContentUpdateEvent internal constructor(
+    player: Player,
+    val newItem: ItemStack
+) : PVEvent(player), Cancellable {
 
     private var cancel: Boolean = false
 

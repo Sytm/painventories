@@ -18,7 +18,6 @@
 
 package de.md5lukas.painventories.panes
 
-import de.md5lukas.commons.MathHelper
 import de.md5lukas.painventories.grids.BasicGrid
 import de.md5lukas.painventories.grids.Grid
 import kotlin.math.max
@@ -52,7 +51,7 @@ class ScrollPane(
 
     var rowScroll: Int = 0
         set(value) {
-            val newValue = MathHelper.clamp(0, maxRowScroll, value)
+            val newValue = clamp(0, maxRowScroll, value)
             if (newValue == field)
                 return
             field = newValue
@@ -60,7 +59,7 @@ class ScrollPane(
         }
     var columnScroll: Int = 0
         set(value) {
-            val newValue = MathHelper.clamp(0, maxColumnScroll, value)
+            val newValue = clamp(0, maxColumnScroll, value)
             if (newValue == field)
                 return
             field = newValue
@@ -116,6 +115,10 @@ class ScrollPane(
             }
             return staticGrid
         }
+
+    private fun clamp(min: Int, max: Int, value: Int): Int {
+        return max(min, min(max, value))
+    }
 
     init {
         apply(init)

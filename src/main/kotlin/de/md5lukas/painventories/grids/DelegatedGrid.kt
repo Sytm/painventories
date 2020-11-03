@@ -20,6 +20,11 @@ package de.md5lukas.painventories.grids
 
 import de.md5lukas.painventories.slots.Slot
 
+/**
+ * A grid that delegates gets to the function provided at creation.
+ *
+ * @param getter The function that gets called to get the content of a slot using row and column
+ */
 class DelegatedGrid(
     override val rows: Int,
     override val columns: Int,
@@ -34,16 +39,8 @@ class DelegatedGrid(
         }
     }
 
-    override fun forEachSet(action: (row: Int, column: Int) -> Slot) {
-        throw UnsupportedOperationException("Delegated Grids do not support set")
-    }
-
     override fun get(row: Int, column: Int): Slot {
         return getter(row, column)
-    }
-
-    override fun set(row: Int, column: Int, slot: Slot) {
-        throw UnsupportedOperationException("Delegated Grids do not support set")
     }
 
     override fun asList(): List<List<Slot>> {

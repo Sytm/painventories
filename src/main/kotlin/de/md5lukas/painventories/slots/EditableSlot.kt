@@ -21,10 +21,15 @@ package de.md5lukas.painventories.slots
 import de.md5lukas.painventories.event.SlotContentUpdateEvent
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import org.jetbrains.annotations.ApiStatus.Internal
 
+/**
+ * Slot that a player modify the content of
+ */
 class EditableSlot(init: EditableSlot.() -> Unit) : AbstractSlot() {
 
+    /**
+     * A listener callback that can be optionally provided in the case that the content of the slot has been changed
+     */
     var onContentUpdateListener: ((slot: EditableSlot, event: SlotContentUpdateEvent) -> Unit)? = null
 
     /**
@@ -40,9 +45,10 @@ class EditableSlot(init: EditableSlot.() -> Unit) : AbstractSlot() {
         return content
     }
 
-    @Internal
-    fun onContentUpdate(event: SlotContentUpdateEvent) {
-        content = event.newItem
+    internal fun onContentUpdate(event: SlotContentUpdateEvent) {
         onContentUpdateListener?.invoke(this, event)
+        if (!event.isCancelled) {
+            content = event.newItem
+        }
     }
 }

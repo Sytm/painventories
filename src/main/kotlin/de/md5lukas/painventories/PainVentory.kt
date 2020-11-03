@@ -25,26 +25,41 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
 
-class PainVentory(options: PainVentoryOptions, val player: Player) :
+/**
+ * A PainVentory is a class that allows creation of GUIs for Bukkit based on the concept of panes that may contain
+ * @constructor
+ * Creates a new PainVentory based on the options that applies to the provided player
+ * @param options The options for the PainVentory
+ * @param player The player that this PainVentory applies to
+ */
+class PainVentory(internal val options: PainVentoryOptions, val player: Player) :
     Layoutable by LayoutPane(options.rows, Constants.INVENTORY_WIDTH, {}) {
 
-    val title = options.title
-    val closeable = options.closeable
-    val size = rows * Constants.INVENTORY_WIDTH
-    val onClose = options.onClose
-
+    /**
+     * The bukkit inventory that this PainVentory uses
+     */
     var inventoryHandle: Inventory? = null
 
+    /**
+     * Opens the PainVentory to the player
+     */
     fun open() {
         PainVentoriesAPI.manager.open(player, this)
     }
 
+    /**
+     * Closes this PainVentory
+     */
     fun close() {
         PainVentoriesAPI.manager.close(player)
     }
 
     internal fun openInventory() {
-        inventoryHandle = Bukkit.createInventory(null, size, title)
+        inventoryHandle = Bukkit.createInventory(
+            null,
+            options.rows * Constants.INVENTORY_WIDTH,
+            options.titleGetter(player)
+        )
         rerenderInventory()
     }
 

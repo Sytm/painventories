@@ -24,6 +24,9 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import java.util.logging.Level
 
+/**
+ * A normal slot that can run click events and show different item stacks based on certain conditions
+ */
 class NormalSlot(init: NormalSlot.() -> Unit) : AbstractSlot() {
 
     /**
