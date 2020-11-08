@@ -39,6 +39,7 @@ class PainVentory(internal val options: PainVentoryOptions, val player: Player) 
      * The bukkit inventory that this PainVentory uses
      */
     var inventoryHandle: Inventory? = null
+        private set
 
     /**
      * Opens the PainVentory to the player
