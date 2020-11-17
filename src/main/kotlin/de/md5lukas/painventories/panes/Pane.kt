@@ -18,12 +18,14 @@
 
 package de.md5lukas.painventories.panes
 
+import de.md5lukas.painventories.PVDSL
 import de.md5lukas.painventories.Updatable
 import de.md5lukas.painventories.grids.Grid
 
 /**
  * A basic definition of a pane
  */
+@PVDSL
 interface Pane : Updatable {
 
     /**
@@ -40,9 +42,4 @@ interface Pane : Updatable {
      * A representation of the pane as a grid
      */
     val grid: Grid
-
-    /**
-     * If the pane is invisible it will not be shown
-     */
-    var visible: Boolean
 }

@@ -22,10 +22,9 @@ import org.bukkit.entity.Player
 
 /**
  * Options that can be shared for multiple instances of PainVentories
- *
- * @param init The initializer for these settings
  */
-class PainVentoryOptions(init: PainVentoryOptions.() -> Unit) {
+@PVDSL
+class PainVentoryOptions {
 
     /**
      * The title for the inventory.
@@ -62,8 +61,4 @@ class PainVentoryOptions(init: PainVentoryOptions.() -> Unit) {
      * tasks when the inventory gets closed
      */
     var onClose: ((player: Player, painVentory: PainVentory) -> Unit)? = null
-
-    init {
-        apply(init)
-    }
 }

@@ -28,5 +28,5 @@ interface Layoutable : Pane {
     /**
      * Adds the specified Pane to this pane as a layout option
      */
-    fun Pane.addToLayout(row: Int, column: Int)
+    fun Pane.addToLayout(row: Int, column: Int): LayoutItem
 }

@@ -27,7 +27,7 @@ import java.util.logging.Level
 /**
  * A normal slot that can run click events and show different item stacks based on certain conditions
  */
-class NormalSlot(init: NormalSlot.() -> Unit) : AbstractSlot() {
+class NormalSlot : AbstractSlot() {
 
     /**
      * Filter that determines if a player sees the normal item or the fallback item, defaults to the normal item
@@ -55,10 +55,6 @@ class NormalSlot(init: NormalSlot.() -> Unit) : AbstractSlot() {
      * Item that is shown to the player if [canSee] determines that he cannot see this item
      */
     var fallbackItem: ItemStack? = null
-
-    init {
-        apply(init)
-    }
 
     override fun getRenderItem(player: Player): ItemStack? {
         return if (canSee(player)) {

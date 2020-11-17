@@ -28,7 +28,7 @@ import de.md5lukas.painventories.slots.StaticSlot
  *
  * @param T The type that will be converted to an Slot
  */
-class PatternPane<T>(rows: Int, columns: Int, init: PatternPane<T>.() -> Unit) :
+class PatternPane<T>(rows: Int, columns: Int) :
     AbstractDefaultablePane(rows, columns) {
 
     override val grid: Grid = DelegatedGrid(rows, columns) { row, column ->
@@ -139,9 +139,5 @@ class PatternPane<T>(rows: Int, columns: Int, init: PatternPane<T>.() -> Unit) :
             return slotConverter(slot)
 
         return StaticSlot.AIR
-    }
-
-    init {
-        apply(init)
     }
 }

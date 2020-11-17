@@ -21,4 +21,5 @@ package de.md5lukas.painventories.internal
 internal object Constants {
 
     const val INVENTORY_WIDTH = 9
+    const val RERENDER_INTERVAL = 1L
 }

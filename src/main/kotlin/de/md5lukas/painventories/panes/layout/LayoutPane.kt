@@ -18,20 +18,30 @@
 
 package de.md5lukas.painventories.panes.layout
 
-import de.md5lukas.painventories.grids.BasicGrid
+import de.md5lukas.painventories.grids.DelegatedGrid
 import de.md5lukas.painventories.grids.Grid
 import de.md5lukas.painventories.panes.AbstractDefaultablePane
 import de.md5lukas.painventories.panes.Pane
+import de.md5lukas.painventories.slots.Slot
 
 /**
  * A layout pane is a pane that manages multiple children panes at different positions.
  *
  * Panes added later to the layout pane take are shown over the previous panes
  */
-class LayoutPane(rows: Int, columns: Int, init: LayoutPane.() -> Unit) : AbstractDefaultablePane(rows, columns),
-    Layoutable {
+class LayoutPane(rows: Int, columns: Int) : AbstractDefaultablePane(rows, columns), Layoutable {
 
-    private val staticGrid = BasicGrid(rows, columns)
+    private val defaultGetter = {
+        this.defaultSlot
+    }
+    private val getters: Array<Array<() -> Slot>> = Array(rows) {
+        Array(columns) {
+            defaultGetter
+        }
+    }
+    private val delegatedGrid = DelegatedGrid(rows, columns) { row, column ->
+        getters[row][column]()
+    }
     private val children: MutableList<LayoutItem> = mutableListOf()
 
     override var updated: Boolean
@@ -39,7 +49,7 @@ class LayoutPane(rows: Int, columns: Int, init: LayoutPane.() -> Unit) : Abstrac
             if (super.updated)
                 return true
             children.forEach {
-                if (it.pane.updated)
+                if (it.visibilityChanged || it.pane.updated)
                     return true
             }
             return false
@@ -48,45 +58,56 @@ class LayoutPane(rows: Int, columns: Int, init: LayoutPane.() -> Unit) : Abstrac
             super.updated = value
             if (!value) {
                 children.forEach {
+                    it.visibilityChanged = value
                     it.pane.updated = value
                 }
             }
         }
 
-    override val grid: Grid
+    private val visibilitiesChanged: Boolean
         get() {
-            if (updated) {
-                rebuildGrid()
+            children.forEach {
+                if (it.visibilityChanged)
+                    return true
             }
-            return staticGrid
+            return false
         }
 
-    private fun addPane(row: Int, column: Int, pane: Pane) {
-        children.add(LayoutItem(row, column, pane))
-        updated = true
-    }
+    override val grid: Grid
+        get() {
+            // Only rebuild grid if the layout pane has changed, not it's children or the visibilities of one of the panes
+            if (super.updated || this.visibilitiesChanged) {
+                rebuildGrid()
+            }
+            return delegatedGrid
+        }
 
-    override fun Pane.addToLayout(row: Int, column: Int) {
-        addPane(row, column, this)
+    override fun Pane.addToLayout(row: Int, column: Int): LayoutItem {
+        val item = LayoutItem(row, column, this)
+        this@LayoutPane.children.add(item)
+        this@LayoutPane.updated = true
+        return item
     }
 
     private fun rebuildGrid() {
-        staticGrid.forEachSet { _, _ -> defaultSlot }
-        children.forEach { layoutItem ->
-            val p = layoutItem.pane
-            if (!p.visible)
+        getters.forEach {
+            it.forEachIndexed { index, _ ->
+                it[index] = defaultGetter
+            }
+        }
+        children.forEach { li ->
+            val p = li.pane
+            if (!li.visible)
                 return@forEach
-            p.grid.forEach { row, column, slot ->
-                val actualRow = row + layoutItem.row
-                val actualColumn = column + layoutItem.column
+            p.grid.forEach { row, column, _ ->
+                val actualRow = row + li.row
+                val actualColumn = column + li.column
                 if (actualRow in 0 until rows && actualColumn in 0 until columns) {
-                    staticGrid.set(actualRow, actualColumn, slot)
+                    getters[actualRow][actualColumn] = {
+                        p.grid[row, column]
+                    }
                 }
             }
         }
-    }
-
-    init {
-        apply(init)
     }
 }

@@ -16,20 +16,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.md5lukas.painventories.panes
+package de.md5lukas.painventories
 
-import com.google.common.base.Preconditions.checkArgument
-
-abstract class AbstractPane(
-    final override val rows: Int,
-    final override val columns: Int,
-) : Pane {
-
-    init {
-        checkArgument(rows >= 1, "The row size must be 1 or greater")
-        checkArgument(columns >= 1, "The column size must be 1 or greater")
-    }
-
-    override var updated: Boolean = true
-
-}
+@DslMarker
+annotation class PVDSL

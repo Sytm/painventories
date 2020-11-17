@@ -25,7 +25,7 @@ import org.bukkit.inventory.ItemStack
 /**
  * Slot that a player modify the content of
  */
-class EditableSlot(init: EditableSlot.() -> Unit) : AbstractSlot() {
+class EditableSlot : AbstractSlot() {
 
     /**
      * A listener callback that can be optionally provided in the case that the content of the slot has been changed
@@ -36,10 +36,6 @@ class EditableSlot(init: EditableSlot.() -> Unit) : AbstractSlot() {
      * The actual item present in the item slot
      */
     var content: ItemStack? = null
-
-    init {
-        apply(init)
-    }
 
     override fun getRenderItem(player: Player): ItemStack? {
         return content

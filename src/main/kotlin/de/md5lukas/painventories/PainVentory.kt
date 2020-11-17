@@ -32,8 +32,8 @@ import org.bukkit.inventory.Inventory
  * @param options The options for the PainVentory
  * @param player The player that this PainVentory applies to
  */
-class PainVentory(internal val options: PainVentoryOptions, val player: Player, init: PainVentory.() -> Unit) :
-    Layoutable by LayoutPane(options.rows, Constants.INVENTORY_WIDTH, {}) {
+class PainVentory(internal val options: PainVentoryOptions, val player: Player) :
+    Layoutable by LayoutPane(options.rows, Constants.INVENTORY_WIDTH) {
 
     private var inventoryHandle: Inventory? = null
 
@@ -71,9 +71,5 @@ class PainVentory(internal val options: PainVentoryOptions, val player: Player, 
             }
             updated = false
         }
-    }
-
-    init {
-        apply(init)
     }
 }

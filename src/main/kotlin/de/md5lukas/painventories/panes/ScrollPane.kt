@@ -27,7 +27,6 @@ class ScrollPane(
     rows: Int,
     columns: Int,
     wrappedPane: Pane,
-    init: ScrollPane.() -> Unit
 ) : AbstractDefaultablePane(rows, columns) {
 
     private val staticGrid = BasicGrid(rows, columns)
@@ -118,9 +117,5 @@ class ScrollPane(
 
     private fun clamp(min: Int, max: Int, value: Int): Int {
         return max(min, min(max, value))
-    }
-
-    init {
-        apply(init)
     }
 }

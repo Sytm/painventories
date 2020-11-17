@@ -45,6 +45,11 @@ internal class InventoryManager(
             this,
             plugin
         )
+        plugin.server.scheduler.runTaskTimer(plugin, Runnable {
+            for (element in openInventories) {
+                element.value.rerenderInventory()
+            }
+        }, 0, Constants.RERENDER_INTERVAL)
     }
 
     fun open(player: Player, painVentory: PainVentory) {
