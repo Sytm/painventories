@@ -20,15 +20,16 @@ package de.md5lukas.painventories.panes
 
 import de.md5lukas.painventories.grids.DelegatedGrid
 import de.md5lukas.painventories.grids.Grid
+import de.md5lukas.painventories.slots.EditableSlot
+import de.md5lukas.painventories.slots.NormalSlot
 import de.md5lukas.painventories.slots.Slot
 import de.md5lukas.painventories.slots.StaticSlot
+import org.bukkit.inventory.ItemStack
 
 /**
  * This pane takes a defined pattern in a 2D array. Each character at a position maps to a slot converter
- *
- * @param T The type that will be converted to an Slot
  */
-class PatternPane<T>(rows: Int, columns: Int) :
+class PatternPane(rows: Int, columns: Int) :
     AbstractDefaultablePane(rows, columns) {
 
     override val grid: Grid = DelegatedGrid(rows, columns) { row, column ->
@@ -36,7 +37,7 @@ class PatternPane<T>(rows: Int, columns: Int) :
     }
 
     private lateinit var pattern: Array<String>
-    private val mappings: MutableMap<Char, T?> = mutableMapOf()
+    private val mappings: MutableMap<Char, Slot> = mutableMapOf()
 
     private val patternRows: Int
         get() = pattern.size
@@ -52,20 +53,7 @@ class PatternPane<T>(rows: Int, columns: Int) :
     /**
      * The default value that should be shown
      */
-    var defaultValue: T? = null
-
-    /**
-     * A callback that converts the arbitrary type [T] to a Slot.
-     *
-     * If [T] is a [Slot] it will be automatically casted to that type by the default callback
-     */
-    var slotConverter: (T) -> Slot = {
-        if (it is Slot) {
-            it
-        } else {
-            throw NotImplementedError("The slot converter needs to be set for a non-slot pattern pane")
-        }
-    }
+    var defaultValue: Slot? = null
 
     /**
      * Parses the provided lines and then applies them to this pattern.
@@ -111,8 +99,20 @@ class PatternPane<T>(rows: Int, columns: Int) :
     /**
      * Maps a character to a slot convertible
      */
-    infix fun Char.to(t: T) {
-        mappings[this] = t
+    infix fun Char.to(slot: Slot) {
+        mappings[this] = slot
+    }
+
+    infix fun Char.staticSlot(stack: ItemStack) {
+        this to StaticSlot(stack)
+    }
+
+    inline infix fun Char.normalSlot(init: NormalSlot.() -> Unit) {
+        this to de.md5lukas.painventories.normalSlot(init)
+    }
+
+    inline infix fun Char.editableSlot(init: EditableSlot.() -> Unit) {
+        this to de.md5lukas.painventories.editableSlot(init)
     }
 
     private operator fun get(row: Int, column: Int): Slot {
@@ -135,9 +135,6 @@ class PatternPane<T>(rows: Int, columns: Int) :
 
         val slot = mappings.getOrDefault(pattern[row][column], defaultValue)
 
-        if (slot != null)
-            return slotConverter(slot)
-
-        return StaticSlot.AIR
+        return slot ?: StaticSlot.AIR
     }
 }

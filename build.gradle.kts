@@ -36,6 +36,10 @@ dependencies {
     compileOnly("org.spigotmc:spigot-api:1.13.2-R0.1-SNAPSHOT")
 }
 
+tasks.withType<ProcessResources> {
+    expand("version" to project.version)
+}
+
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
 }

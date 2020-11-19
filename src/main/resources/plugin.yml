@@ -1,0 +1,5 @@
+name: PainVentories
+version: ${version}
+main: de.md5lukas.painventories.internal.PainVentories
+depend: [ Kotlin ]
+api-version: "1.13"

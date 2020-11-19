@@ -37,8 +37,8 @@ inline fun painVentory(opts: PainVentoryOptions, player: Player, init: PainVento
 inline fun scrollPane(rows: Int, column: Int, wrappedPane: Pane, init: ScrollPane.() -> Unit) =
     ScrollPane(rows, column, wrappedPane).apply(init)
 
-inline fun <T> patternPane(rows: Int, columns: Int, init: PatternPane<T>.() -> Unit) =
-    PatternPane<T>(rows, columns).apply(init)
+inline fun patternPane(rows: Int, columns: Int, init: PatternPane.() -> Unit) =
+    PatternPane(rows, columns).apply(init)
 
 inline fun layoutPane(rows: Int, columns: Int, init: LayoutPane.() -> Unit) = LayoutPane(rows, columns).apply(init)
 
