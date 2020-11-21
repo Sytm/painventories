@@ -29,7 +29,7 @@ import de.md5lukas.painventories.slots.Slot
  *
  * Panes added later to the layout pane take are shown over the previous panes
  */
-class LayoutPane(rows: Int, columns: Int) : AbstractDefaultablePane(rows, columns), Layoutable {
+class LayoutPane(rows: Int, columns: Int) : AbstractDefaultablePane(rows, columns) {
 
     private val defaultGetter = {
         this.defaultSlot
@@ -82,7 +82,10 @@ class LayoutPane(rows: Int, columns: Int) : AbstractDefaultablePane(rows, column
             return delegatedGrid
         }
 
-    override fun Pane.addToLayout(row: Int, column: Int): LayoutItem {
+    /**
+     * Adds the specified Pane to this pane as a layout option
+     */
+    fun Pane.addToLayout(row: Int, column: Int): LayoutItem {
         val item = LayoutItem(row, column, this)
         this@LayoutPane.children.add(item)
         this@LayoutPane.updated = true

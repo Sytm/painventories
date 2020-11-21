@@ -26,22 +26,14 @@ import de.md5lukas.painventories.panes.ScrollPane
 import de.md5lukas.painventories.panes.layout.LayoutPane
 import de.md5lukas.painventories.slots.EditableSlot
 import de.md5lukas.painventories.slots.NormalSlot
-import org.bukkit.entity.Player
 
 /**
- * Creates a [PainVentoryOptions] instance and initializes it
+ * Creates a [PainVentory] and initializes it
  *
  * @param init Initializer block
  */
-inline fun painVentoryOptions(init: PainVentoryOptions.() -> Unit) = PainVentoryOptions().apply(init)
-
-/**
- * Creates a [PainVentory] for the [player] and initializes it
- *
- * @param init Initializer block
- */
-inline fun painVentory(opts: PainVentoryOptions, player: Player, init: PainVentory.() -> Unit) =
-    PainVentory(opts, player).apply(init)
+inline fun painVentory(init: PainVentory.() -> Unit) =
+    PainVentory().apply(init)
 
 /**
  * Creates a [ScrollPane] with the given size and initializes it
