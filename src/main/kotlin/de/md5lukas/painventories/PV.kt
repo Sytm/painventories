@@ -28,21 +28,54 @@ import de.md5lukas.painventories.slots.EditableSlot
 import de.md5lukas.painventories.slots.NormalSlot
 import org.bukkit.entity.Player
 
+/**
+ * Creates a [PainVentoryOptions] instance and initializes it
+ *
+ * @param init Initializer block
+ */
 inline fun painVentoryOptions(init: PainVentoryOptions.() -> Unit) = PainVentoryOptions().apply(init)
 
+/**
+ * Creates a [PainVentory] for the [player] and initializes it
+ *
+ * @param init Initializer block
+ */
 inline fun painVentory(opts: PainVentoryOptions, player: Player, init: PainVentory.() -> Unit) =
     PainVentory(opts, player).apply(init)
 
-
+/**
+ * Creates a [ScrollPane] with the given size and initializes it
+ *
+ * @param init Initializer block
+ */
 inline fun scrollPane(rows: Int, column: Int, wrappedPane: Pane, init: ScrollPane.() -> Unit) =
     ScrollPane(rows, column, wrappedPane).apply(init)
 
+/**
+ * Creates a [PatternPane] with the given size and initializes it
+ *
+ * @param init Initializer block
+ */
 inline fun patternPane(rows: Int, columns: Int, init: PatternPane.() -> Unit) =
     PatternPane(rows, columns).apply(init)
 
+/**
+ * Creates a [LayoutPane] with the given size and initializes it
+ *
+ * @param init Initializer block
+ */
 inline fun layoutPane(rows: Int, columns: Int, init: LayoutPane.() -> Unit) = LayoutPane(rows, columns).apply(init)
 
-
+/**
+ * Creates a [NormalSlot] and initializes it
+ *
+ * @param init Initializer block
+ */
 inline fun normalSlot(init: NormalSlot.() -> Unit) = NormalSlot().apply(init)
 
+/**
+ * Creates an [EditableSlot] and initializes it
+ *
+ * @param init Initializer block
+ */
 inline fun editableSlot(init: EditableSlot.() -> Unit) = EditableSlot().apply(init)

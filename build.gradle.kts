@@ -2,7 +2,8 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.4.10"
+    kotlin("jvm") version "1.4.20"
+    id("org.jetbrains.dokka") version "1.4.10.2"
     `maven-publish`
     id("com.github.johnrengelman.shadow") version "6.1.0"
 }
@@ -30,13 +31,14 @@ repositories {
 }
 
 dependencies {
-    implementation(kotlin("stdlib-jdk8"))
+    api(kotlin("stdlib-jdk8"))
     implementation("de.md5lukas:md5-commons:2.0.0-SNAPSHOT")
     compileOnly("org.jetbrains:annotations:20.1.0")
     compileOnly("org.spigotmc:spigot-api:1.13.2-R0.1-SNAPSHOT")
 }
 
 tasks.withType<ProcessResources> {
+    outputs.upToDateWhen { false }
     expand("version" to project.version)
 }
 
@@ -53,6 +55,17 @@ tasks.withType<ShadowJar> {
     }
 
     relocate("de.md5lukas.commons", "de.md5lukas.painventories.internal.commons")
+}
+
+val sourcesJar by tasks.creating(Jar::class) {
+    archiveClassifier.set("sources")
+    from(sourceSets.main.get().allSource)
+}
+
+val javadocJar by tasks.creating(Jar::class) {
+    dependsOn(tasks.dokkaJavadoc)
+    archiveClassifier.set("javadoc")
+    from(tasks.dokkaJavadoc)
 }
 
 publishing {
@@ -74,6 +87,8 @@ publishing {
     publications {
         create<MavenPublication>("maven") {
             project.shadow.component(this)
+            artifact(sourcesJar)
+            artifact(javadocJar)
         }
     }
 }

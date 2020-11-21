@@ -35,6 +35,7 @@ import org.bukkit.inventory.Inventory
 class PainVentory(internal val options: PainVentoryOptions, val player: Player) :
     Layoutable by LayoutPane(options.rows, Constants.INVENTORY_WIDTH) {
 
+
     private var inventoryHandle: Inventory? = null
 
     /**
@@ -52,11 +53,17 @@ class PainVentory(internal val options: PainVentoryOptions, val player: Player) 
     }
 
     internal fun openInventory() {
-        inventoryHandle = Bukkit.createInventory(
-            null,
-            options.rows * Constants.INVENTORY_WIDTH,
-            options.titleGetter(player)
-        )
+        if (inventoryHandle == null) {
+            inventoryHandle = Bukkit.createInventory(
+                null,
+                options.rows * Constants.INVENTORY_WIDTH,
+                options.titleGetter(player)
+            )
+        }
+        inventoryHandle?.let { player.openInventory(it) }
+
+        // Mark self as updated to force rerender
+        updated = true
         rerenderInventory()
     }
 

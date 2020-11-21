@@ -34,7 +34,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.Plugin
 
 internal class InventoryManager(
-    plugin: Plugin
+    private val plugin: Plugin
 ) : Listener {
 
     private val openInventories: MutableMap<Player, PainVentory> = HashMap()
@@ -53,21 +53,17 @@ internal class InventoryManager(
     }
 
     fun open(player: Player, painVentory: PainVentory) {
-        close(player)
+        if (player in openInventories) {
+            close(player)
+        }
         openInventories[player] = painVentory
+        println(openInventories)
         painVentory.openInventory()
     }
 
     fun close(player: Player) {
-        runCloseHook(player)
         closeQueue.add(player)
         player.closeInventory()
-    }
-
-    private fun runCloseHook(player: Player) {
-        openInventories[player]?.let {
-            it.options.onClose?.invoke(player, it)
-        }
     }
 
     @EventHandler(priority = EventPriority.LOW)
@@ -103,7 +99,7 @@ internal class InventoryManager(
 
             if (slot is NormalSlot) {
                 if (slot.runOnShiftClicks || !e.isShiftClick)
-                slot.runClick(SlotClickEvent(p, inv, e.click))
+                    slot.runClick(SlotClickEvent(p, inv, e.click))
                 inv.rerenderInventory()
             }
         }
@@ -142,12 +138,19 @@ internal class InventoryManager(
             closeQueue.remove(p)
             inv.options.onClose?.invoke(p, inv)
         } else {
-            inv.openInventory()
+            nextTick {
+                inv.openInventory()
+            }
         }
     }
 
     @EventHandler(priority = EventPriority.LOW)
     private fun onQuit(e: PlayerQuitEvent) {
-        runCloseHook(e.player)
+        openInventories[e.player]?.let { it.options.onClose?.invoke(e.player, it) }
+        openInventories.remove(e.player)
+    }
+
+    private fun nextTick(block: () -> Unit) {
+        plugin.server.scheduler.runTask(plugin, block)
     }
 }
