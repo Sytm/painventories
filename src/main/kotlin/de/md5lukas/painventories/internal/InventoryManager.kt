@@ -57,7 +57,6 @@ internal class InventoryManager(
             close(player)
         }
         openInventories[player] = painVentory
-        println(openInventories)
         painVentory.openInventory()
     }
 
@@ -89,7 +88,7 @@ internal class InventoryManager(
             val slot = inv.rootPane.grid[row, column]
 
             if (slot is EditableSlot) {
-                val event = SlotContentUpdateEvent(p, e.currentItem ?: ItemStack(Material.AIR))
+                val event = SlotContentUpdateEvent(p, e.cursor ?: ItemStack(Material.AIR))
                 slot.onContentUpdate(event)
                 e.isCancelled = event.isCancelled
                 return
@@ -136,6 +135,7 @@ internal class InventoryManager(
         }
         if (inv.closeable || closeQueue.contains(p)) {
             closeQueue.remove(p)
+            openInventories.remove(p)
             inv.onClose?.invoke(p, inv)
         } else {
             nextTick {

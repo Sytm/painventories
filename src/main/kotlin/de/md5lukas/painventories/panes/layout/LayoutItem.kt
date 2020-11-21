@@ -21,14 +21,14 @@ package de.md5lukas.painventories.panes.layout
 import de.md5lukas.painventories.panes.Pane
 
 /**
+ * @property pane The pane itself
  * @property row The row of the top-left most corner of the pane
  * @property column The column of the top-left most corner of the pane
- * @property pane The pane itself
  */
-data class LayoutItem(
+data class LayoutItem<out T : Pane>(
+    val pane: T,
     val row: Int,
     val column: Int,
-    val pane: Pane,
 ) {
     var visible: Boolean = true
         set(value) {

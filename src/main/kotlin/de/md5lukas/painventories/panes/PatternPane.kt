@@ -26,6 +26,8 @@ import de.md5lukas.painventories.slots.Slot
 import de.md5lukas.painventories.slots.StaticSlot
 import org.bukkit.inventory.ItemStack
 
+// TODO Make all content of pattern know ahead of time so when for example on creates editable slots, a list is returned with each of them
+
 /**
  * This pane takes a defined pattern in a 2D array. Each character at a position maps to a slot converter
  */
@@ -133,7 +135,7 @@ class PatternPane(rows: Int, columns: Int) :
                 throw IllegalArgumentException("The column $column is out of bounds ($patternColumns)")
         }
 
-        val slot = mappings.getOrDefault(pattern[row][column], defaultValue)
+        val slot = mappings.getOrDefault(pattern[varRow][varColumn], defaultValue)
 
         return slot ?: StaticSlot.AIR
     }

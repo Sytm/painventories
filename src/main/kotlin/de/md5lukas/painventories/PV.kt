@@ -20,9 +20,7 @@
 
 package de.md5lukas.painventories
 
-import de.md5lukas.painventories.panes.Pane
 import de.md5lukas.painventories.panes.PatternPane
-import de.md5lukas.painventories.panes.ScrollPane
 import de.md5lukas.painventories.panes.layout.LayoutPane
 import de.md5lukas.painventories.slots.EditableSlot
 import de.md5lukas.painventories.slots.NormalSlot
@@ -34,14 +32,6 @@ import de.md5lukas.painventories.slots.NormalSlot
  */
 inline fun painVentory(init: PainVentory.() -> Unit) =
     PainVentory().apply(init)
-
-/**
- * Creates a [ScrollPane] with the given size and initializes it
- *
- * @param init Initializer block
- */
-inline fun scrollPane(rows: Int, column: Int, wrappedPane: Pane, init: ScrollPane.() -> Unit) =
-    ScrollPane(rows, column, wrappedPane).apply(init)
 
 /**
  * Creates a [PatternPane] with the given size and initializes it

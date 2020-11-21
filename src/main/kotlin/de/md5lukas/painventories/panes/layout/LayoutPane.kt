@@ -42,7 +42,7 @@ class LayoutPane(rows: Int, columns: Int) : AbstractDefaultablePane(rows, column
     private val delegatedGrid = DelegatedGrid(rows, columns) { row, column ->
         getters[row][column]()
     }
-    private val children: MutableList<LayoutItem> = mutableListOf()
+    private val children: MutableList<LayoutItem<Pane>> = mutableListOf()
 
     override var updated: Boolean
         get() {
@@ -85,8 +85,8 @@ class LayoutPane(rows: Int, columns: Int) : AbstractDefaultablePane(rows, column
     /**
      * Adds the specified Pane to this pane as a layout option
      */
-    fun Pane.addToLayout(row: Int, column: Int): LayoutItem {
-        val item = LayoutItem(row, column, this)
+    fun <T : Pane> T.addToLayout(row: Int, column: Int): LayoutItem<T> {
+        val item = LayoutItem(this, row, column)
         this@LayoutPane.children.add(item)
         this@LayoutPane.updated = true
         return item
