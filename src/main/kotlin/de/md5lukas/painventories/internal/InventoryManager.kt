@@ -19,7 +19,7 @@
 package de.md5lukas.painventories.internal
 
 import de.md5lukas.painventories.PainVentory
-import de.md5lukas.painventories.event.SlotClickEvent
+import de.md5lukas.painventories.SlotClickEvent
 import de.md5lukas.painventories.slots.NormalSlot
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler

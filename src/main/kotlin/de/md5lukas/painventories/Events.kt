@@ -16,11 +16,16 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.md5lukas.painventories.event
+package de.md5lukas.painventories
 
-import de.md5lukas.painventories.PainVentory
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
+
+/**
+ * Class defining a PainVentories event involving a player
+ * @property player The player that has caused the event
+ */
+sealed class PVEvent constructor(val player: Player)
 
 /**
  * Event that is fired when a player clicks on a slot

@@ -19,7 +19,7 @@
 package de.md5lukas.painventories.slots
 
 import de.md5lukas.painventories.PainVentoriesAPI
-import de.md5lukas.painventories.event.SlotClickEvent
+import de.md5lukas.painventories.SlotClickEvent
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import java.util.logging.Level
