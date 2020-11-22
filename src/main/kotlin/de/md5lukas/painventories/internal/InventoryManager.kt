@@ -20,17 +20,13 @@ package de.md5lukas.painventories.internal
 
 import de.md5lukas.painventories.PainVentory
 import de.md5lukas.painventories.event.SlotClickEvent
-import de.md5lukas.painventories.event.SlotContentUpdateEvent
-import de.md5lukas.painventories.slots.EditableSlot
 import de.md5lukas.painventories.slots.NormalSlot
-import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.*
 import org.bukkit.event.player.PlayerQuitEvent
-import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.Plugin
 
 internal class InventoryManager(
@@ -70,15 +66,16 @@ internal class InventoryManager(
         val p = e.whoClicked as Player
         val inv = openInventories[p] ?: return
 
+        e.isCancelled = true
+
         if (e.action == InventoryAction.NOTHING && e.click != ClickType.MIDDLE) {
-            e.isCancelled = true
             return
         }
 
-        if (e.action == InventoryAction.COLLECT_TO_CURSOR || e.action == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
-            e.isCancelled = true
-            if (e.click != ClickType.SHIFT_LEFT && e.click != ClickType.SHIFT_RIGHT)
-                return
+        if ((e.action == InventoryAction.COLLECT_TO_CURSOR || e.action == InventoryAction.MOVE_TO_OTHER_INVENTORY)
+            && e.click != ClickType.SHIFT_LEFT && e.click != ClickType.SHIFT_RIGHT
+        ) {
+            return
         }
 
         if (e.clickedInventory == p.openInventory.topInventory) {
@@ -87,19 +84,11 @@ internal class InventoryManager(
 
             val slot = inv.rootPane.grid[row, column]
 
-            if (slot is EditableSlot) {
-                val event = SlotContentUpdateEvent(p, e.cursor ?: ItemStack(Material.AIR))
-                slot.onContentUpdate(event)
-                e.isCancelled = event.isCancelled
-                return
-            } else {
-                e.isCancelled = true
-            }
-
             if (slot is NormalSlot) {
-                if (slot.runOnShiftClicks || !e.isShiftClick)
+                if (slot.runOnShiftClicks || !e.isShiftClick) {
                     slot.runClick(SlotClickEvent(p, inv, e.click))
-                inv.rerenderInventory()
+                    inv.rerenderInventory()
+                }
             }
         }
     }
@@ -107,22 +96,9 @@ internal class InventoryManager(
     @EventHandler(priority = EventPriority.LOW)
     private fun onDrag(e: InventoryDragEvent) {
         val p = e.whoClicked as Player
-        val inv = openInventories[p] ?: return
+        openInventories[p] ?: return
 
-        val topSize = p.openInventory.topInventory.size
-
-        val grid = inv.rootPane.grid
-
-        for (slot in e.rawSlots) {
-            if (slot >= topSize)
-                continue
-            val row: Int = slot / 9
-            val column: Int = slot % 9
-            if (grid[row, column] is EditableSlot)
-                continue
-            e.isCancelled = true
-            return
-        }
+        e.isCancelled = true
     }
 
     @EventHandler(priority = EventPriority.LOW)

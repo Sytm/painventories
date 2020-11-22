@@ -100,9 +100,6 @@ class PatternPane(rows: Int, columns: Int) :
     /**
      * Maps a character to a [Slot]
      *
-     * **IMPORTANT:** When setting an EditableSlot using this function and the Character maps to multiple slots,
-     * undefined behaviour may occur
-     *
      * @receiver The character to map to
      * @param slot The slot to map to the character
      */

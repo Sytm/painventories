@@ -22,7 +22,6 @@ package de.md5lukas.painventories
 
 import de.md5lukas.painventories.panes.PatternPane
 import de.md5lukas.painventories.panes.layout.LayoutPane
-import de.md5lukas.painventories.slots.EditableSlot
 import de.md5lukas.painventories.slots.NormalSlot
 
 /**
@@ -54,10 +53,3 @@ inline fun layoutPane(rows: Int, columns: Int, init: LayoutPane.() -> Unit) = La
  * @param init Initializer block
  */
 inline fun normalSlot(init: NormalSlot.() -> Unit) = NormalSlot().apply(init)
-
-/**
- * Creates an [EditableSlot] and initializes it
- *
- * @param init Initializer block
- */
-inline fun editableSlot(init: EditableSlot.() -> Unit) = EditableSlot().apply(init)
