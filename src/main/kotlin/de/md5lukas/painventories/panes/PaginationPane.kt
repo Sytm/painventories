@@ -26,7 +26,7 @@ import de.md5lukas.painventories.slots.Slot
 /**
  * A pagination pane takes its contents and puts it on different pages depending on the size
  */
-class PaginationPane(rows: Int, columns: Int) : AbstractDefaultablePane(rows, columns) {
+class PaginationPane(rows: Int, columns: Int) : AbstractPane(rows, columns) {
 
     private val items: PaginationList<() -> Slot> = PaginationList(rows * columns)
 

@@ -29,7 +29,7 @@ import org.bukkit.inventory.ItemStack
  * This pane takes a defined pattern in a 2D array. Each character at a position maps to a slot
  */
 class PatternPane(rows: Int, columns: Int) :
-    AbstractDefaultablePane(rows, columns) {
+    AbstractPane(rows, columns) {
 
     override val grid: Grid = DelegatedGrid(rows, columns) { row, column ->
         this[row, column]

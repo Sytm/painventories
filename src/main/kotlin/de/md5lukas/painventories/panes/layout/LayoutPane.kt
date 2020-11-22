@@ -20,7 +20,7 @@ package de.md5lukas.painventories.panes.layout
 
 import de.md5lukas.painventories.grids.DelegatedGrid
 import de.md5lukas.painventories.grids.Grid
-import de.md5lukas.painventories.panes.AbstractDefaultablePane
+import de.md5lukas.painventories.panes.AbstractPane
 import de.md5lukas.painventories.panes.Pane
 import de.md5lukas.painventories.slots.Slot
 
@@ -29,7 +29,7 @@ import de.md5lukas.painventories.slots.Slot
  *
  * Panes added later to the layout pane take are shown over the previous panes
  */
-class LayoutPane(rows: Int, columns: Int) : AbstractDefaultablePane(rows, columns) {
+class LayoutPane(rows: Int, columns: Int) : AbstractPane(rows, columns) {
 
     private val defaultGetter = {
         this.defaultSlot

@@ -27,7 +27,7 @@ class ScrollPane(
     rows: Int,
     columns: Int,
     wrappedPane: Pane,
-) : AbstractDefaultablePane(rows, columns) {
+) : AbstractPane(rows, columns) {
 
     private val staticGrid = BasicGrid(rows, columns)
 

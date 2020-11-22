@@ -18,7 +18,8 @@
 
 package de.md5lukas.painventories.panes
 
-import com.google.common.base.Preconditions.checkArgument
+import com.google.common.base.Preconditions
+import de.md5lukas.painventories.slots.StaticSlot
 
 abstract class AbstractPane(
     final override val rows: Int,
@@ -26,10 +27,18 @@ abstract class AbstractPane(
 ) : Pane {
 
     init {
-        checkArgument(rows >= 1, "The row size must be 1 or greater")
-        checkArgument(columns >= 1, "The column size must be 1 or greater")
+        Preconditions.checkArgument(rows >= 1, "The row size must be 1 or greater")
+        Preconditions.checkArgument(columns >= 1, "The column size must be 1 or greater")
     }
 
     override var updated: Boolean = true
 
+    /**
+     * The slot content that is shown when the slot is updated
+     */
+    var defaultSlot: StaticSlot = StaticSlot.AIR
+        set(value) {
+            field = value
+            updated = true
+        }
 }
