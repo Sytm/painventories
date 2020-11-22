@@ -19,9 +19,9 @@
 package de.md5lukas.painventories.internal
 
 import de.md5lukas.painventories.panes.EditablePane
-import org.bukkit.inventory.ItemStack
+import de.md5lukas.painventories.panes.ItemStackWrapper
 
-internal class EditablePaneIterator(private val pane: EditablePane) : AbstractIterator<ItemStack?>() {
+internal class EditablePaneIterator(private val pane: EditablePane) : AbstractIterator<ItemStackWrapper>() {
 
     private var currentRow = 0
     private var currentColumn = 0
@@ -32,7 +32,7 @@ internal class EditablePaneIterator(private val pane: EditablePane) : AbstractIt
             return
         }
 
-        setNext(pane[currentRow, currentColumn])
+        setNext(ItemStackWrapper(pane, currentRow, currentColumn))
 
         if (++currentColumn == pane.columns) {
             currentColumn = 0

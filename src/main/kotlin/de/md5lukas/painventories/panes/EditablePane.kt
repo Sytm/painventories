@@ -24,7 +24,7 @@ import de.md5lukas.painventories.internal.EditablePaneIterator
 import de.md5lukas.painventories.slots.EditableSlot
 import org.bukkit.inventory.ItemStack
 
-class EditablePane(rows: Int, columns: Int) : AbstractPane(rows, columns), Iterable<ItemStack?> {
+class EditablePane(rows: Int, columns: Int) : AbstractPane(rows, columns), Iterable<ItemStackWrapper> {
 
     private val basicGrid = BasicGrid(rows, columns)
 
@@ -49,5 +49,16 @@ class EditablePane(rows: Int, columns: Int) : AbstractPane(rows, columns), Itera
         return slot.content
     }
 
-    override operator fun iterator(): Iterator<ItemStack?> = EditablePaneIterator(this)
+    override operator fun iterator(): Iterator<ItemStackWrapper> = EditablePaneIterator(this)
+}
+
+class ItemStackWrapper(private val pane: EditablePane, private val row: Int, private val column: Int) {
+
+    fun get() = pane[row, column]
+
+    operator fun component1() = get()
+
+    fun set(stack: ItemStack?) {
+        pane[row, column] = stack
+    }
 }
