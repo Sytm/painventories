@@ -20,16 +20,13 @@ package de.md5lukas.painventories.panes
 
 import de.md5lukas.painventories.grids.DelegatedGrid
 import de.md5lukas.painventories.grids.Grid
-import de.md5lukas.painventories.slots.EditableSlot
 import de.md5lukas.painventories.slots.NormalSlot
 import de.md5lukas.painventories.slots.Slot
 import de.md5lukas.painventories.slots.StaticSlot
 import org.bukkit.inventory.ItemStack
 
-// TODO Make all content of pattern know ahead of time so when for example on creates editable slots, a list is returned with each of them
-
 /**
- * This pane takes a defined pattern in a 2D array. Each character at a position maps to a slot converter
+ * This pane takes a defined pattern in a 2D array. Each character at a position maps to a slot
  */
 class PatternPane(rows: Int, columns: Int) :
     AbstractDefaultablePane(rows, columns) {
@@ -38,7 +35,7 @@ class PatternPane(rows: Int, columns: Int) :
         this[row, column]
     }
 
-    private lateinit var pattern: Array<String>
+    private val pattern: MutableList<String> = mutableListOf()
     private val mappings: MutableMap<Char, Slot> = mutableMapOf()
 
     private val patternRows: Int
@@ -58,63 +55,79 @@ class PatternPane(rows: Int, columns: Int) :
     var defaultValue: Slot? = null
 
     /**
-     * Parses the provided lines and then applies them to this pattern.
+     * Adds the provided lines to the pattern
      *
-     * - The amount of lines cannot be zero
-     * - Each line must not be empty and the same length as the first one
+     * Each line must not be empty and the same length as the first one
      */
     fun lines(lines: List<String>) {
-        if (lines.isEmpty()) {
-            throw IllegalArgumentException("The lines for the pattern cannot be empty")
+        for (line in lines) {
+            validateLine(line)
+            pattern.add(line)
         }
-        var lineLength: Int = -1
-
-        lines.forEachIndexed { index, line ->
-            if (line.isEmpty()) {
-                throw IllegalArgumentException("The line at $index has a length of 0")
-            }
-
-            if (lineLength == -1) {
-                lineLength = line.length
-            } else {
-                if (line.length != lineLength) {
-                    throw IllegalArgumentException(
-                        "The line at $index has a length of ${line.length} which does not match the length of the first line ($lineLength)"
-                    )
-                }
-            }
-        }
-
-        pattern = lines.toTypedArray()
     }
 
     /**
-     * Parses the provided lines and then applies them to this pattern.
+     * Adds the provided lines to the pattern
      *
-     * - The amount of lines cannot be zero
-     * - Each line must not be empty and the same length as the first one
+     * Each line must not be empty and the same length as the first one
      */
     fun lines(vararg lines: String) {
-        lines(lines.toList())
+        for (line in lines) {
+            validateLine(line)
+            pattern.add(line)
+        }
     }
 
     /**
-     * Maps a character to a slot convertible
+     * Adds the provided lines to the pattern
+     *
+     * The line must not be empty and the same length as the first one
+     */
+    operator fun String.unaryPlus() {
+        validateLine(this)
+        pattern.add(this)
+    }
+
+    private fun validateLine(line: String) {
+        if (line.isEmpty()) {
+            throw IllegalArgumentException("The provided line to add is empty")
+        }
+        if (pattern.isNotEmpty() && patternColumns != line.length) {
+            throw IllegalArgumentException("The line does not have the same length (${line.length}) as the first line of the pattern ($patternColumns)")
+        }
+    }
+
+    /**
+     * Maps a character to a [Slot]
+     *
+     * **IMPORTANT:** When setting an EditableSlot using this function and the Character maps to multiple slots,
+     * undefined behaviour may occur
+     *
+     * @receiver The character to map to
+     * @param slot The slot to map to the character
      */
     infix fun Char.to(slot: Slot) {
         mappings[this] = slot
     }
 
+    /**
+     * Creates a [StaticSlot] based on the provided [ItemStack] and maps that to a character
+     *
+     * @receiver The character to map to
+     * @param stack The ItemStack for the StaticSlot
+     */
     infix fun Char.staticSlot(stack: ItemStack) {
         this to StaticSlot(stack)
     }
 
+    /**
+     * Creates a [NormalSlot] using the provided initializer and maps that to a character
+     *
+     * @receiver The character to map to
+     * @param init The initializer for the NormalSlot
+     */
     inline infix fun Char.normalSlot(init: NormalSlot.() -> Unit) {
         this to de.md5lukas.painventories.normalSlot(init)
-    }
-
-    inline infix fun Char.editableSlot(init: EditableSlot.() -> Unit) {
-        this to de.md5lukas.painventories.editableSlot(init)
     }
 
     private operator fun get(row: Int, column: Int): Slot {
@@ -137,6 +150,6 @@ class PatternPane(rows: Int, columns: Int) :
 
         val slot = mappings.getOrDefault(pattern[varRow][varColumn], defaultValue)
 
-        return slot ?: StaticSlot.AIR
+        return slot ?: defaultSlot
     }
 }
