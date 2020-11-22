@@ -75,7 +75,7 @@ class PainVentory {
     /**
      * The first time this value is accessed, modifications to [rows] will not make any difference
      */
-    val rootPane: LayoutPane by lazy {
+    val rootPane: LayoutPane by lazy(LazyThreadSafetyMode.NONE) {
         rowsToUse = rows
         LayoutPane(rowsToUse, Constants.INVENTORY_WIDTH)
     }

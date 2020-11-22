@@ -25,7 +25,7 @@ import org.bukkit.inventory.meta.*
 inline fun itemStack(type: Material, init: ItemStack.() -> Unit) = ItemStack(type).apply(init)
 
 inline fun ItemStack.meta(init: ItemMeta.() -> Unit) {
-    itemMeta?.apply(init)
+    this.itemMeta = this.itemMeta?.apply(init)
 }
 
 inline fun ItemStack.bannerMeta(init: BannerMeta.() -> Unit) = genericMeta(init)
@@ -45,7 +45,7 @@ inline fun ItemStack.tropicalFishBucketMeta(init: TropicalFishBucketMeta.() -> U
 inline fun <reified T : ItemMeta> ItemStack.genericMeta(init: T.() -> Unit) {
     val meta = this.itemMeta
     if (meta is T) {
-        meta.apply(init)
+        this.itemMeta = meta.apply(init)
     } else {
         val className = T::class.simpleName
         throw IllegalArgumentException("Trying to modify the ItemMeta as $className, but it is not of type $className")
