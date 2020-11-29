@@ -3,3 +3,5 @@
  */
 
 rootProject.name = "painventories"
+
+include(":test-plugin")

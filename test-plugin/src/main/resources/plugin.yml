@@ -1,0 +1,5 @@
+name: PainVentoriesTest
+version: ${version}
+main: de.md5lukas.painventories.test.Main
+depend: [ Kotlin ]
+api-version: "1.13"
