@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.md5lukas.painventories
+package de.md5lukas.painventories.item
 
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
