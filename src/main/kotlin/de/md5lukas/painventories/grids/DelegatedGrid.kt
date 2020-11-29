@@ -21,9 +21,9 @@ package de.md5lukas.painventories.grids
 import de.md5lukas.painventories.slots.Slot
 
 /**
- * A grid that delegates gets to the function provided at creation.
+ * A grid that delegates reads to the provided callback function.
  *
- * @param getter The function that gets called to get the content of a slot using row and column
+ * @param getter The callback function that reads get delegated to using the requested row and slot
  */
 class DelegatedGrid(
     override val rows: Int,
@@ -41,13 +41,5 @@ class DelegatedGrid(
 
     override fun get(row: Int, column: Int): Slot {
         return getter(row, column)
-    }
-
-    override fun asList(): List<List<Slot>> {
-        return List(rows) { row ->
-            List(columns) { column ->
-                getter(row, column)
-            }
-        }
     }
 }

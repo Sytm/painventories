@@ -22,7 +22,7 @@ import de.md5lukas.painventories.slots.Slot
 import de.md5lukas.painventories.slots.StaticSlot
 
 /**
- * A basic grid implementation getting and setting of its contents based on a backing 2D list
+ * A basic grid implementation that uses a 2D-array for its contents that supports read and write operations
  *
  * @param defaultValue The default value to fill the grid with at it's initialization
  */
@@ -32,8 +32,8 @@ class BasicGrid(
     defaultValue: Slot = StaticSlot.AIR
 ) : Grid {
 
-    private val grid: List<MutableList<Slot>> = List(rows) {
-        MutableList(columns) {
+    private val grid: Array<Array<Slot>> = Array(rows) {
+        Array(columns) {
             defaultValue
         }
     }
@@ -47,7 +47,7 @@ class BasicGrid(
     }
 
     /**
-     * Calls the callback with each row and column and the returned value is set in the grid
+     * Calls the callback with each row and column and the returned value is put in the grid at the same position
      */
     fun forEachSet(action: (row: Int, column: Int) -> Slot) {
         grid.forEachIndexed { rowNumber, row ->
@@ -64,11 +64,9 @@ class BasicGrid(
      *
      * @param row The row of the slot
      * @param column The column of the slot
-     * @param slot The new content in the grid
+     * @param slot The new content for the slot
      */
     operator fun set(row: Int, column: Int, slot: Slot) {
         grid[row][column] = slot
     }
-
-    override fun asList(): List<List<Slot>> = grid
 }

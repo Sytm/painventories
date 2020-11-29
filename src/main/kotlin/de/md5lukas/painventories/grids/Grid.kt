@@ -21,7 +21,7 @@ package de.md5lukas.painventories.grids
 import de.md5lukas.painventories.slots.Slot
 
 /**
- * A simple grid with a defined size and functions to iterate over and modify it
+ * A simple grid with a defined size and functions to iterate over it
  */
 interface Grid {
 
@@ -36,7 +36,7 @@ interface Grid {
     val columns: Int
 
     /**
-     * Calls the callback with each slot, its row and column
+     * Calls the callback with each slot and its row and column
      */
     fun forEach(action: ((row: Int, column: Int, slot: Slot) -> Unit))
 
@@ -47,9 +47,4 @@ interface Grid {
      * @param column The column of the slot
      */
     operator fun get(row: Int, column: Int): Slot
-
-    /**
-     * Returns the content of the grid as a 2D list
-     */
-    fun asList(): List<List<Slot>>
 }
