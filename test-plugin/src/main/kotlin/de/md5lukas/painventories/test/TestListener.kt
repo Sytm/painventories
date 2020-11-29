@@ -137,7 +137,7 @@ class TestListener(private val plugin: Plugin) : Listener {
                 patternPane(1, 9) {
                     +"_<__x__>_"
 
-                    defaultValue = StaticSlot.AIR
+                    defaultValue = StaticSlot.EMPTY
                     '<' normalSlot {
                         item = itemStack(Material.ARROW) {
                             meta {

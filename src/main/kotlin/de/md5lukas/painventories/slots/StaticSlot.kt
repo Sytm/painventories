@@ -18,7 +18,6 @@
 
 package de.md5lukas.painventories.slots
 
-import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
@@ -27,10 +26,10 @@ import org.bukkit.inventory.ItemStack
  *
  * @param itemStack The item stack that will be shown
  */
-class StaticSlot(private val itemStack: ItemStack) : AbstractSlot() {
+class StaticSlot(private val itemStack: ItemStack?) : Slot() {
 
     companion object Singletons {
-        val AIR = StaticSlot(ItemStack(Material.AIR))
+        val EMPTY = StaticSlot(null)
     }
 
     override fun getRenderItem(player: Player): ItemStack? {

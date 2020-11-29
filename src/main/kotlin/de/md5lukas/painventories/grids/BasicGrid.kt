@@ -29,7 +29,7 @@ import de.md5lukas.painventories.slots.StaticSlot
 class BasicGrid(
     override val rows: Int,
     override val columns: Int,
-    defaultValue: Slot = StaticSlot.AIR
+    defaultValue: Slot = StaticSlot.EMPTY
 ) : Grid {
 
     private val grid: Array<Array<Slot>> = Array(rows) {

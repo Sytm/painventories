@@ -39,7 +39,7 @@ object PainVentoriesAPI {
         }
         get() = nullablePlugin ?: throw IllegalStateException("A plugin has not been set yet")
 
-    internal val manager: InventoryManager by lazy {
+    internal val manager: InventoryManager by lazy(LazyThreadSafetyMode.NONE) {
         InventoryManager(plugin)
     }
 }

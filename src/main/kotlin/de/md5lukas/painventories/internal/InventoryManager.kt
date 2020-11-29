@@ -20,7 +20,6 @@ package de.md5lukas.painventories.internal
 
 import de.md5lukas.painventories.PainVentory
 import de.md5lukas.painventories.SlotClickEvent
-import de.md5lukas.painventories.slots.NormalSlot
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -84,12 +83,8 @@ internal class InventoryManager(
 
             val slot = inv.rootPane.grid[row, column]
 
-            if (slot is NormalSlot) {
-                if (slot.runOnShiftClicks || !e.isShiftClick) {
-                    slot.runClick(SlotClickEvent(p, inv, e.click))
-                    inv.rerenderInventory()
-                }
-            }
+            slot.runClick(SlotClickEvent(p, inv, e.click))
+            inv.rerenderInventory()
         }
     }
 

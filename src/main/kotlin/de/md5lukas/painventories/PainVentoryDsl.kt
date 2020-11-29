@@ -19,4 +19,4 @@
 package de.md5lukas.painventories
 
 @DslMarker
-annotation class PVDSL
+annotation class PainVentoryDsl

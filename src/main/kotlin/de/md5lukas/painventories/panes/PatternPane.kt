@@ -29,7 +29,7 @@ import org.bukkit.inventory.ItemStack
  * This pane takes a defined pattern in a 2D array. Each character at a position maps to a slot
  */
 class PatternPane(rows: Int, columns: Int) :
-    AbstractPane(rows, columns) {
+    Pane(rows, columns) {
 
     override val grid: Grid = DelegatedGrid(rows, columns) { row, column ->
         this[row, column]
@@ -60,6 +60,7 @@ class PatternPane(rows: Int, columns: Int) :
      * Each line must not be empty and the same length as the first one
      */
     fun lines(lines: List<String>) {
+        updated = true
         for (line in lines) {
             validateLine(line)
             pattern.add(line)
@@ -72,6 +73,7 @@ class PatternPane(rows: Int, columns: Int) :
      * Each line must not be empty and the same length as the first one
      */
     fun lines(vararg lines: String) {
+        updated = true
         for (line in lines) {
             validateLine(line)
             pattern.add(line)
@@ -85,6 +87,7 @@ class PatternPane(rows: Int, columns: Int) :
      */
     operator fun String.unaryPlus() {
         validateLine(this)
+        updated = true
         pattern.add(this)
     }
 
@@ -104,6 +107,7 @@ class PatternPane(rows: Int, columns: Int) :
      * @param slot The slot to map to the character
      */
     infix fun Char.to(slot: Slot) {
+        updated = true
         mappings[this] = slot
     }
 
@@ -114,6 +118,7 @@ class PatternPane(rows: Int, columns: Int) :
      * @param stack The ItemStack for the StaticSlot
      */
     infix fun Char.staticSlot(stack: ItemStack) {
+        updated = true
         this to StaticSlot(stack)
     }
 
@@ -124,6 +129,7 @@ class PatternPane(rows: Int, columns: Int) :
      * @param init The initializer for the NormalSlot
      */
     inline infix fun Char.normalSlot(init: NormalSlot.() -> Unit) {
+        updated = true
         this to de.md5lukas.painventories.normalSlot(init)
     }
 
