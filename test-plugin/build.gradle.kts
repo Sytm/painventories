@@ -19,7 +19,7 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation("org.spigotmc:spigot-api:1.13.2-R0.1-SNAPSHOT")
-    implementation(project(":"))
+    implementation(project(path = ":", configuration = "shadow"))
 }
 
 tasks.withType<ProcessResources> {
