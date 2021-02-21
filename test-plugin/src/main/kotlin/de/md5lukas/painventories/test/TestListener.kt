@@ -18,8 +18,8 @@
 
 package de.md5lukas.painventories.test
 
-import de.md5lukas.painventories.itemStack
-import de.md5lukas.painventories.meta
+import de.md5lukas.painventories.item.itemStack
+import de.md5lukas.painventories.item.meta
 import de.md5lukas.painventories.painVentory
 import de.md5lukas.painventories.panes.PaginationPane
 import de.md5lukas.painventories.panes.ScrollPane
