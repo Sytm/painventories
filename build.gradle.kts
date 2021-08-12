@@ -1,11 +1,9 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.4.20"
-    id("org.jetbrains.dokka") version "1.4.10.2"
+    kotlin("jvm") version "1.5.21"
+    id("org.jetbrains.dokka") version "1.5.0"
     `maven-publish`
-    id("com.github.johnrengelman.shadow") version "6.1.0"
 }
 
 group = "de.md5lukas"
@@ -15,9 +13,7 @@ description = "PainVentories"
 repositories {
     mavenLocal()
     mavenCentral()
-    jcenter()
 
-    maven(url = "https://repo.sytm.de/repository/maven-hosted/")
     maven(url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
     maven(url = "https://oss.sonatype.org/content/groups/public/")
 }
@@ -25,8 +21,7 @@ repositories {
 dependencies {
     api(kotlin("stdlib-jdk8"))
     implementation("org.spigotmc:spigot-api:1.13.2-R0.1-SNAPSHOT")
-    implementation("de.md5lukas:md5-commons:2.0.0-SNAPSHOT")
-    compileOnly("org.jetbrains:annotations:20.1.0")
+    compileOnly("org.jetbrains:annotations:21.0.1")
 }
 
 tasks.withType<ProcessResources> {
@@ -36,17 +31,6 @@ tasks.withType<ProcessResources> {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
-}
-
-tasks.withType<ShadowJar> {
-    archiveClassifier.set("")
-    minimize()
-
-    dependencies {
-        include(dependency("de.md5lukas:md5-commons"))
-    }
-
-    relocate("de.md5lukas.commons", "de.md5lukas.painventories.internal.commons")
 }
 
 val sourcesJar by tasks.creating(Jar::class) {
@@ -78,7 +62,7 @@ publishing {
     }
     publications {
         create<MavenPublication>("maven") {
-            project.shadow.component(this)
+            from(components["kotlin"])
             artifact(sourcesJar)
             artifact(javadocJar)
         }
